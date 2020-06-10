@@ -1,0 +1,507 @@
+openapi: 3.0.0
+info:
+  title: IdoMatanRecipeApi
+  description: Api for manage recipes
+  version: 1.0.0
+servers:
+- url: http://localhost:3001
+tags:
+- name: auth
+  description: All authentication related routes
+- name: users
+  description: All the user personal app info related routes
+- name: recipes
+  description: All recipes general info
+paths:
+  /login:
+    post:
+      tags:
+      - auth
+      summary: login
+      description: a JSON object containing the username and password.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+        required: true
+      responses:
+        "200":
+          description: |
+            user authenticated successfully. The session ID is returned in a cookie named 'session'. You need to include this cookie in subsequent requests.
+          headers:
+            Set-Cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: session=987s9dfsdf987fd08
+        "401":
+          description: Authentication failed
+  /register:
+    post:
+      tags:
+      - auth
+      summary: registration for the site
+      description: creating a new user and save his details on DB
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_1'
+        required: true
+      responses:
+        "200":
+          description: new user added successfuly
+        "401":
+          description: error username already exist
+  /recipes/search/{recipeName}/amount/{amount}:
+    get:
+      tags:
+      - recipes
+      description: search for recipes in the spooncular API, using a search query.
+        will return results accurding to number param. can filter resulted by cusine,
+        diet and intolerances.
+      parameters:
+      - name: recipeName
+        in: path
+        description: the search query for searching a query in tha API
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: amount
+        in: path
+        description: number of search results to retrieve
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          default: 5
+          enum:
+          - 5
+          - 10
+          - 15
+      - name: cuisine
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Cusine'
+      - name: diet
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Diet'
+      - name: intolerances
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Intolerances'
+      responses:
+        "200":
+          description: successful retrieved search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReciepePreiview'
+        "204":
+          description: No recipes found for the search params
+  /recipes/recipeInfo/{recipeId}:
+    get:
+      tags:
+      - recipes
+      description: get full info about specific recipe by his id
+      parameters:
+      - name: recipeId
+        in: path
+        description: the recipe id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+        example: 3423
+      responses:
+        "200":
+          description: successful retrieved recipe information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FullReciepePreiview'
+        "204":
+          description: No recipe found for this id
+  /recipes/random/:
+    get:
+      tags:
+      - recipes
+      description: get info about 3 recipes which  were random chosen
+      responses:
+        "200":
+          description: successfuly retrieved 3 randomly recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReciepePreiview'
+  /users/recipeInfo/{ids}:
+    get:
+      tags:
+      - users
+      description: get the user's app info on reciepes by their ids
+      parameters:
+      - name: ids
+        in: path
+        description: Recipes ids array, for returning user data
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: array
+          items:
+            type: integer
+      responses:
+        "200":
+          description: object with the user info foreach of the sended ids
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  required:
+                  - saved
+                  - watched
+                  type: object
+                  properties:
+                    watched:
+                      type: boolean
+                    saved:
+                      type: boolean
+                  example:
+                    "23":
+                      watched: true
+                      saved: false
+                description: User's info on recipes. Returns a dictionary of ids as
+                  keys, and info as values
+      security:
+      - cookieAuth: []
+  /users/myRecipes/:
+    get:
+      tags:
+      - users
+      description: get personal user's reciepes
+      responses:
+        "200":
+          description: successfully return user's personal reciepes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FullReciepePreiview'
+        "204":
+          description: No exist recipes
+      security:
+      - cookieAuth: []
+  /users/familyRecipes/:
+    get:
+      tags:
+      - users
+      description: get family user's reciepes
+      responses:
+        "200":
+          description: successfully return user family reciepes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FullReciepePreiview'
+        "204":
+          description: No exist recipes
+      security:
+      - cookieAuth: []
+  /users/addToWatchTable/:
+    post:
+      tags:
+      - users
+      description: add recipe to watch table on DB
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              example: 41341
+        required: true
+      responses:
+        "200":
+          description: successfully add recipe to watch table
+        "401":
+          description: unauthorized
+      security:
+      - cookieAuth: []
+  /users/lastWatch/:
+    get:
+      tags:
+      - users
+      description: get user 3 last watches reciepes
+      responses:
+        "200":
+          description: successfully return user 3 last watches reciepes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReciepePreiview'
+        "204":
+          description: No exist recipes
+      security:
+      - cookieAuth: []
+  /users/addToFavorites/:
+    post:
+      tags:
+      - users
+      description: add recipe to favorites table on DB
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              example: 41341
+        required: true
+      responses:
+        "200":
+          description: successfully add recipe to favorites table
+        "401":
+          description: unauthorized
+      security:
+      - cookieAuth: []
+  /users/myFavorites/:
+    get:
+      tags:
+      - users
+      description: get user favorite reciepes
+      responses:
+        "200":
+          description: successfully return user user favorite reciepes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReciepePreiview'
+        "204":
+          description: No exist recipes
+      security:
+      - cookieAuth: []
+  /users/logout/:
+    post:
+      tags:
+      - users
+      description: logout user from the site
+      responses:
+        "200":
+          description: user logout successfully from the site
+      security:
+      - cookieAuth: []
+components:
+  schemas:
+    ReciepePreiview:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: the recipe id, returned for further proccessing and actions
+            on recipes.
+          example: 2
+        image:
+          type: string
+          description: the recipe image url
+          example: https://spoonacular.com/recipeImages/716429-556x370.jpg
+        title:
+          type: string
+          description: the recipe title
+          example: Pizza
+        readyInMinutes:
+          type: integer
+          description: reciepe ready duration in minutes
+          example: 30
+        aggregateLikes:
+          type: integer
+          description: number of likes which the recipe got
+          example: 200
+        vegan:
+          type: boolean
+          example: false
+        vegetarian:
+          type: boolean
+          example: false
+        glutenFree:
+          type: boolean
+          example: true
+    FullReciepePreiview:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: the recipe id, returned for further proccessing and actions
+            on recipes.
+          example: 2
+        image:
+          type: string
+          description: the recipe image url
+          example: https://spoonacular.com/recipeImages/716429-556x370.jpg
+        title:
+          type: string
+          description: the recipe title
+          example: Pizza
+        readyInMinutes:
+          type: integer
+          description: reciepe ready duration in minutes
+          example: 30
+        aggregateLikes:
+          type: integer
+          description: number of likes which the recipe got
+          example: 200
+        vegan:
+          type: boolean
+          example: false
+        vegetarian:
+          type: boolean
+          example: false
+        glutenFree:
+          type: boolean
+          example: true
+        ingredients:
+          type: string
+          example: 10 g chocolate
+        instructions:
+          type: string
+          example: Heat a medium size sauce pan. Add butter and melt. Add brown sugar
+            and whipping cream. Whisk. Bring to a boil.
+        servings:
+          type: integer
+          example: 5
+    Cusine:
+      type: string
+      enum:
+      - African
+      - American
+      - British
+      - Cajun
+      - Caribbean
+      - Chinese
+      - Eastern European
+      - European
+      - French
+      - German
+      - Greek
+      - Indian
+      - Irish
+      - Italian
+      - Japanese
+      - Jewish
+      - Korean
+      - Latin American
+      - Mediterranean
+      - Mexican
+      - Middle Eastern
+      - Nordic
+      - Southern
+      - Spanish
+      - Thai
+      - Vietnamese
+    Diet:
+      type: string
+      enum:
+      - Gluten Free
+      - Ketogenic
+      - Vegetarian
+      - Lacto-Vegetarian
+      - Ovo-Vegetarian
+      - Vegan
+      - Pescetarian
+      - Paleo
+      - Primal
+      - Whole30
+    Intolerances:
+      type: string
+      enum:
+      - Dairy
+      - Egg
+      - Gluten
+      - Grain
+      - Peanut
+      - Seafood
+      - Sesame
+      - Shellfish
+      - Soy
+      - Sulfite
+      - Tree Nut
+      - Wheat
+    body:
+      type: object
+      properties:
+        username:
+          maxLength: 8
+          minLength: 3
+          type: string
+          description: contains only lettets
+          example: matanshu
+        password:
+          maxLength: 10
+          minLength: 5
+          type: string
+          description: contains at least 1 numerical character and one special character.
+          example: matan#14
+    body_1:
+      type: object
+      properties:
+        username:
+          maxLength: 8
+          minLength: 3
+          type: string
+          description: contains only lettets
+          example: matanshu
+        firstName:
+          type: string
+          example: Matan
+        lastName:
+          type: string
+          example: Cohen
+        country:
+          type: string
+          example: Israel
+        password:
+          maxLength: 10
+          minLength: 5
+          type: string
+          description: contains at least 1 numerical character and one special character.
+          example: matan#14
+        confirmPassword:
+          maxLength: 10
+          minLength: 5
+          type: string
+          description: confirm the same password
+          example: matan#14
+        email:
+          type: string
+          format: email
+          example: shimo123@gmail.com
+        profileImage:
+          type: string
+          example: matanshu
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      name: session
+      in: cookie
