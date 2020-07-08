@@ -1,9 +1,5 @@
 //require("dotenv").config();
 // --- Libraries importing
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of c8a15e4... heroku
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("client-sessions");
