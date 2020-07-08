@@ -7,6 +7,10 @@ const session = require("client-sessions");
 const morgan = require("morgan");
 //const path = require("path");
 const DButils = require("./DB/DButils");
+const cors = require("cors");
+
+app.use(cors());
+app.options("*", cors());
 
 // --- Routes importing
 const auth = require("./routes/auth");
