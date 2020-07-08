@@ -151,7 +151,7 @@ async function getRecipeFromApiById(recipeId) {
     `https://api.spoonacular.com/recipes/${recipeId}/information`,
     {
       params: {
-        apiKey: process.env.spooncular_apiKey,
+        apiKey: "8888fa9d5e894d3f8f6ead539bc3b747",
       },
     }
   );
