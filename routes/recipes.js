@@ -3,7 +3,7 @@ const router = express.Router();
 const axios = require("axios");
 const api_domain = "https://api.spoonacular.com/recipes";
 const search_utils = require("./utils/search_utils");
-const apiKey = "8888fa9d5e894d3f8f6ead539bc3b747";
+console.log(process.env.spooncular_apiKey);
 
 //--------------get full recipe info----------------------------
 router.get("/recipeInfo/:recipeId", async (req, res, next) => {
@@ -13,7 +13,7 @@ router.get("/recipeInfo/:recipeId", async (req, res, next) => {
       `https://api.spoonacular.com/recipes/${req.params.recipeId}/information`,
       {
         params: {
-          apiKey: "8888fa9d5e894d3f8f6ead539bc3b747",
+          apiKey: process.env.spooncular_apiKey,
         },
       }
     );
@@ -58,7 +58,7 @@ router.get("/random", async (req, res, next) => {
     while (instructions1 == "" || instructions2 == "" || instructions3 == "") {
       recipe = await axios.get(`https://api.spoonacular.com/recipes/random`, {
         params: {
-          apiKey: "8888fa9d5e894d3f8f6ead539bc3b747",
+          apiKey: process.env.spooncular_apiKey,
           number: "3",
         },
       });
@@ -99,7 +99,7 @@ router.get("/search/:recipeName/amount/:amount", async (req, res) => {
   search_params.query = recipeName;
   search_params.number = amount;
   search_params.instructionsRequired = true;
-  search_params.apiKey = apiKey;
+  search_params.apiKey = process.env.spooncular_apiKey;
   //check if queries params exist
   search_utils.extractQueriesParams(req.query, search_params);
 

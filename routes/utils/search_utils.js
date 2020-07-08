@@ -1,5 +1,5 @@
 const axios = require("axios");
-const apiKey = "8888fa9d5e894d3f8f6ead539bc3b747";
+const apiKey = process.env.spooncular_apiKey;
 
 async function searchForRecipes(search_params) {
   let search_response = await axios.get(
