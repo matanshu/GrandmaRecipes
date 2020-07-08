@@ -2,10 +2,10 @@ require("dotenv").config();
 const sql = require("mssql");
 
 const config = {
-  user: "idokest",
-  password: "Idk1197143",
-  server: "idoandmatanserver.database.windows.net",
-  database: "DB3.2",
+  user: process.env.tedious_userName,
+  password: process.env.tedious_password,
+  server: process.env.tedious_server,
+  database: process.env.tedious_database,
   connectionTimeout: 1500000,
   options: {
     encrypt: true,
