@@ -9,9 +9,6 @@ const morgan = require("morgan");
 const DButils = require("./DB/DButils");
 const cors = require("cors");
 
-app.use(cors());
-app.options("*", cors());
-
 // --- Routes importing
 const auth = require("./routes/auth");
 const user = require("./routes/users");
@@ -23,6 +20,9 @@ var port = process.env.PORT || "3001";
 app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json()); // parse application/json
 app.use(morgan(":method :url :status   :response-time ms")); //logger
+
+app.use(cors());
+app.options("*", cors());
 
 app.use(
   session({
