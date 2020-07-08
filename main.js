@@ -1,6 +1,6 @@
 require("dotenv").config();
 // --- Libraries importing
-console.log(process.env.PORT);
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("client-sessions");
