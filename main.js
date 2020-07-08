@@ -1,5 +1,6 @@
-//require("dotenv").config();
+require("dotenv").config();
 // --- Libraries importing
+console.log(process.env.PORT);
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("client-sessions");
@@ -22,7 +23,7 @@ app.use(morgan(":method :url :status   :response-time ms")); //logger
 app.use(
   session({
     cookieName: "session", // the cookie key name
-    secret: "woos3sld1341nhdkf321", // the encryption key
+    secret: process.env.COOKIE_SECRET, // the encryption key
     duration: 20 * 60 * 1000, // expired after 20 sec
     activeDuration: 0, // if expiresIn < activeDuration,
     //the session will be extended by activeDuration milliseconds
