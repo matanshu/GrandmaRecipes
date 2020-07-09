@@ -21,8 +21,13 @@ app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-
 app.use(bodyParser.json()); // parse application/json
 app.use(morgan(":method :url :status   :response-time ms")); //logger
 
-app.use(cors());
-app.options("*", cors());
+const corsConfig = {
+  origin: true,
+  credentials: true,
+};
+
+app.use(cors(corsConfig));
+app.options("*", cors(corsConfig));
 
 app.use(
   session({
