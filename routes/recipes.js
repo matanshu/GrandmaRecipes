@@ -25,7 +25,7 @@ router.get("/recipeInfo/:recipeId", async (req, res, next) => {
       ingredients.push(element.original);
     });
     let display_recipe = getFullRecipeParams(recipe.data, ingredients);
-    res.json(display_recipe);
+    res.status(200).json(display_recipe);
   } catch (error) {
     next(error);
   }
@@ -44,6 +44,7 @@ function getFullRecipeParams(data, ingredients) {
     ingredients: ingredients,
     instructions: data.instructions,
     servings: data.servings,
+    analyzedInstructions: data.analyzedInstructions,
   };
 }
 
@@ -79,15 +80,14 @@ router.get("/random", async (req, res, next) => {
 
 function getPartialRecipeParams(data) {
   return {
-    [data.id]: {
-      image: data.image,
-      title: data.title,
-      readyInMinutes: data.readyInMinutes,
-      aggregateLikes: data.aggregateLikes,
-      vegan: data.vegan,
-      vegetarian: data.vegetarian,
-      glutenFree: data.glutenFree,
-    },
+    id: data.id,
+    image: data.image,
+    title: data.title,
+    readyInMinutes: data.readyInMinutes,
+    aggregateLikes: data.aggregateLikes,
+    vegan: data.vegan,
+    vegetarian: data.vegetarian,
+    glutenFree: data.glutenFree,
   };
 }
 

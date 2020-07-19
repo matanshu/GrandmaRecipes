@@ -49,7 +49,7 @@ function getFullRecipeData(data) {
 }
 // --------------add to watch table----------------------
 router.post("/addToWatchTable", async (req, res) => {
-  let recipe_id = req.body.recipeId;
+  let recipe_id = req.body.recipeId.toString();
   let watch_recipe = await DBQueries.getSpecificWatchedRecipeByUserId(
     req.user_id,
     recipe_id
@@ -68,29 +68,33 @@ router.post("/addToWatchTable", async (req, res) => {
     second = lastWatchRecipe[0].recipe_id2;
     third = lastWatchRecipe[0].recipe_id3;
   }
-  if (first == null) {
-    await DBQueries.insertRecipeIntoLastWatchTable(req.user_id, recipe_id);
-  } else if (second == null) {
-    if (first != recipe_id) {
-      second = first;
-      await DBQueries.updateToLastWatch(req.user_id, recipe_id, second);
-    }
-    //else first = recipe_id
+
+  let oldArr = [first, second, third];
+  let newArr = [first, second, third];
+  let preview_recipe_array = [];
+  if (!oldArr.includes(recipe_id) || oldArr[2] == recipe_id) {
+    newArr[0] = recipe_id;
+    newArr[1] = oldArr[0];
+    newArr[2] = oldArr[1];
   } else {
-    if (first != recipe_id) {
-      if (second != recipe_id) {
-        third = second;
-      }
-      second = first;
-      await DBQueries.updateToLastWatch(req.user_id, recipe_id, second, third);
+    if (oldArr[1] == recipe_id) {
+      newArr[0] = oldArr[1];
+      newArr[1] = oldArr[0];
     }
   }
+  await DBQueries.updateToLastWatch(
+    req.user_id,
+    newArr[0],
+    newArr[1],
+    newArr[2]
+  );
   res.sendStatus(200);
 });
 
 //--------------recipes info in acccording to users----------------------
 router.get("/recipeInfo/:ids", async (req, res) => {
   const ids = JSON.parse(req.params.ids);
+  //req.params.recipeId
   const userId = req.user_id;
   const userRecipesData = await getUserInfoOnRecipes(userId, ids);
   res.json(userRecipesData);
@@ -120,6 +124,43 @@ async function getUserInfoOnRecipes(userId, ids) {
   return ans;
 }
 
+//--------------single recipe info acccording to login user----------------------
+router.get("/singleRecipeInfo/:id", async (req, res) => {
+  const id = req.params.id;
+  const userId = req.user_id;
+  const userRecipesData = await getUserInfoOnSingleRecipe(userId, id);
+  res.json(userRecipesData);
+});
+
+async function getUserInfoOnSingleRecipe(userId, id) {
+  let favoriteRecipes = await DBQueries.getAllFavoriteRecipes(userId);
+  let watchRecipes = await DBQueries.getAllwatchesRecipes(userId);
+  let ans = [];
+  let ifFavotite = false;
+  let ifWatch = false;
+  if (checkFavoriteOrWatchStatusForIds(id, favoriteRecipes)) {
+    ifFavotite = true;
+  }
+  if (checkFavoriteOrWatchStatusForIds(id, watchRecipes)) {
+    ifWatch = true;
+  }
+  let obejct = {
+    watched: ifWatch,
+    saved: ifFavotite,
+  };
+  return obejct;
+}
+
+function checkFavoriteOrWatchStatusForIds(id, arrayOfRecipes) {
+  for (let i = 0; i < arrayOfRecipes.length; i++) {
+    console.log(arrayOfRecipes[i].recipe_id);
+    if (arrayOfRecipes[i].recipe_id == id) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // --------------3 last watch recipes
 router.get("/lastWatch", async (req, res) => {
   let recipes_id_array = await DBQueries.getLastWatchRecipes(req.user_id);
@@ -127,15 +168,15 @@ router.get("/lastWatch", async (req, res) => {
   let second = recipes_id_array[0].recipe_id2;
   let third = recipes_id_array[0].recipe_id3;
   let preview_recipe_array = [];
-  if (first != null) {
+  if (first != null && first != "undefined") {
     let recipe1 = await getRecipeFromApiById(first);
     preview_recipe_array.push(recipe1);
   }
-  if (second != null) {
+  if (second != null && second != "undefined") {
     let recipe2 = await getRecipeFromApiById(second);
     preview_recipe_array.push(recipe2);
   }
-  if (third != null) {
+  if (third != null && third != "undefined") {
     let recipe3 = await getRecipeFromApiById(third);
     preview_recipe_array.push(recipe3);
   }
