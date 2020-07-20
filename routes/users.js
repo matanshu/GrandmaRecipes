@@ -67,27 +67,28 @@ router.post("/addToWatchTable", async (req, res) => {
     first = lastWatchRecipe[0].recipe_id1;
     second = lastWatchRecipe[0].recipe_id2;
     third = lastWatchRecipe[0].recipe_id3;
-  }
-
-  let oldArr = [first, second, third];
-  let newArr = [first, second, third];
-  let preview_recipe_array = [];
-  if (!oldArr.includes(recipe_id) || oldArr[2] == recipe_id) {
-    newArr[0] = recipe_id;
-    newArr[1] = oldArr[0];
-    newArr[2] = oldArr[1];
-  } else {
-    if (oldArr[1] == recipe_id) {
-      newArr[0] = oldArr[1];
+    let oldArr = [first, second, third];
+    let newArr = [first, second, third];
+    let preview_recipe_array = [];
+    if (!oldArr.includes(recipe_id) || oldArr[2] == recipe_id) {
+      newArr[0] = recipe_id;
       newArr[1] = oldArr[0];
+      newArr[2] = oldArr[1];
+    } else {
+      if (oldArr[1] == recipe_id) {
+        newArr[0] = oldArr[1];
+        newArr[1] = oldArr[0];
+      }
     }
+    await DBQueries.updateToLastWatch(
+      req.user_id,
+      newArr[0],
+      newArr[1],
+      newArr[2]
+    );
+  } else {
+    DBQueries.insertRecipeIntoLastWatchTable(req.user_id, recipe_id);
   }
-  await DBQueries.updateToLastWatch(
-    req.user_id,
-    newArr[0],
-    newArr[1],
-    newArr[2]
-  );
   res.sendStatus(200);
 });
 
