@@ -169,15 +169,15 @@ router.get("/lastWatch", async (req, res) => {
   let second = recipes_id_array[0].recipe_id2;
   let third = recipes_id_array[0].recipe_id3;
   let preview_recipe_array = [];
-  if (first != null && first != "undefined") {
+  if (first != "null" && first != "undefined") {
     let recipe1 = await getRecipeFromApiById(first);
     preview_recipe_array.push(recipe1);
   }
-  if (second != null && second != "undefined") {
+  if (second != "null" && second != "undefined") {
     let recipe2 = await getRecipeFromApiById(second);
     preview_recipe_array.push(recipe2);
   }
-  if (third != null && third != "undefined") {
+  if (third != "null" && third != "undefined") {
     let recipe3 = await getRecipeFromApiById(third);
     preview_recipe_array.push(recipe3);
   }
