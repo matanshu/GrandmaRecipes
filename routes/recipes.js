@@ -3,12 +3,10 @@ const router = express.Router();
 const axios = require("axios");
 const api_domain = "https://api.spoonacular.com/recipes";
 const search_utils = require("./utils/search_utils");
-console.log(process.env.spooncular_apiKey);
 
 //--------------get full recipe info----------------------------
 router.get("/recipeInfo/:recipeId", async (req, res, next) => {
   try {
-    console.log(req.params.recipeId);
     const recipe = await axios.get(
       `https://api.spoonacular.com/recipes/${req.params.recipeId}/information`,
       {

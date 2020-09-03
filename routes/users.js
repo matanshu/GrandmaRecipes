@@ -26,7 +26,6 @@ router.get("/familyRecipes", async (req, res) => {
   let myRecipes = await DBQueries.getMyFamilyRecipes(req.user_id.toLowerCase());
   let myRecipes_array = [];
   for (let i = 0; i < myRecipes.length; i++) {
-    console.log(myRecipes[i].ingerdients);
     myRecipes_array.push(getFullRecipeData(myRecipes[i]));
   }
   res.json(myRecipes_array);
@@ -62,7 +61,6 @@ router.post("/addToWatchTable", async (req, res) => {
     await DBQueries.insertRecipeIntoWatchRecipe(req.user_id, recipe_id);
   }
   lastWatchRecipe = await DBQueries.getLastWatchRecipes(req.user_id);
-  console.log(lastWatchRecipe);
   if (lastWatchRecipe.length != 0) {
     first = lastWatchRecipe[0].recipe_id1;
     second = lastWatchRecipe[0].recipe_id2;
@@ -154,7 +152,6 @@ async function getUserInfoOnSingleRecipe(userId, id) {
 
 function checkFavoriteOrWatchStatusForIds(id, arrayOfRecipes) {
   for (let i = 0; i < arrayOfRecipes.length; i++) {
-    console.log(arrayOfRecipes[i].recipe_id);
     if (arrayOfRecipes[i].recipe_id == id) {
       return true;
     }
@@ -165,27 +162,33 @@ function checkFavoriteOrWatchStatusForIds(id, arrayOfRecipes) {
 // --------------3 last watch recipes
 router.get("/lastWatch", async (req, res) => {
   let recipes_id_array = await DBQueries.getLastWatchRecipes(req.user_id);
-  let first = recipes_id_array[0].recipe_id1;
-  let second = recipes_id_array[0].recipe_id2;
-  let third = recipes_id_array[0].recipe_id3;
   let preview_recipe_array = [];
-  if (first != "null" && first != "undefined") {
-    let recipe1 = await getRecipeFromApiById(first);
-    preview_recipe_array.push(recipe1);
+  if (recipes_id_array.length > 0) {
+    //res.status(404).send({ message: "no watched recipes yet", success: true });
+    let first = recipes_id_array[0].recipe_id1;
+    let second = recipes_id_array[0].recipe_id2;
+    let third = recipes_id_array[0].recipe_id3;
+    if (first != null && first != "null" && first != "undefined") {
+      let recipe1 = await getRecipeFromApiById(first);
+      preview_recipe_array.push(recipe1);
+    }
+    if (second != null && second != "null" && second != "undefined") {
+      let recipe2 = await getRecipeFromApiById(second);
+      preview_recipe_array.push(recipe2);
+    }
+    if (third != null && third != "null" && third != "undefined") {
+      let recipe3 = await getRecipeFromApiById(third);
+      preview_recipe_array.push(recipe3);
+    }
   }
-  if (second != "null" && second != "undefined") {
-    let recipe2 = await getRecipeFromApiById(second);
-    preview_recipe_array.push(recipe2);
-  }
-  if (third != "null" && third != "undefined") {
-    let recipe3 = await getRecipeFromApiById(third);
-    preview_recipe_array.push(recipe3);
-  }
-  if (preview_recipe_array.length != 0) {
-    res.json(preview_recipe_array);
-  } else {
-    res.status(201).send({ message: "no watched recipes yet", success: true });
-  }
+  res.json(preview_recipe_array);
+  // if (preview_recipe_array.length != 0) {
+  // }
+  // else {
+  //   res
+  //     .status(201)
+  //     .send({ message: "no watched recipes yet", success: true });
+  // }
 });
 
 async function getRecipeFromApiById(recipeId) {

@@ -2,7 +2,6 @@ const axios = require("axios");
 const apiKey = process.env.spooncular_apiKey;
 
 async function searchForRecipes(search_params) {
-  console.log(search_params);
   let search_response = await axios.get(
     `https://api.spoonacular.com/recipes/search`,
     {
@@ -74,14 +73,12 @@ function extractSearchResultsIds(search_response) {
 //res.send(recipes.data);
 
 function extractQueriesParams(query_params, search_params) {
-  console.log(query_params);
   const params_list = ["diet", "cuisine", "intolerances"];
   params_list.forEach((param) => {
     if (query_params[param]) {
       search_params[param] = query_params[param];
     }
   });
-  //console.log(search_params);
 }
 
 exports.searchForRecipes = searchForRecipes;
