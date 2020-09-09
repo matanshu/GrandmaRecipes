@@ -3,7 +3,7 @@ Link to swagger api - https://app.swaggerhub.com/apis-docs/matanshu/IdoMatanReci
 Server side of the Project - "Recipes Of Grandma And Others"
 The project is a website on recipes, which is a platform for saving, creating, following and getting information on recipes.
 It also interfaces with external api - "https://spoonacular.com/".
-More technical info:
+More additional info:
 1. The backend was implemented in node.js + express.js
 2. Data base was implemented in azure sql.
 3. Includes three routers: auth, users and recipes
