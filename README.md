@@ -1,12 +1,12 @@
-Matan Shushan - 204106950, Ido Kestenbaum - 205767833
-link to swagger api - https://app.swaggerhub.com/apis-docs/matanshu/IdoMatanRecipeApi/1.0.0
-important info about server project part 3.2:
-1. We try to split the implementation as much as we can to different files
-2. There are 3 routers: auth, users and recipes
-3. auth => for All authentication related routes 
-4. users => for all the user personal app info related routes
-5. recipes => for all recipes general info
-6. There is a completely seperation between functionality of a login user to guest (not login)
-7. All the DB functionality (INSERT, SELECT and etc.) is implemented on seperated file which contains only DB functions.
-8. The server is implementing only one request each time as small as possible. moreover, There is no mix between different functionality.
-
+Developers, Matan Shushan - 204106950, Ido Kestenbaum - 205767833
+Link to swagger api - https://app.swaggerhub.com/apis-docs/matanshu/IdoMatanRecipeApi/1.0.0
+Server side of the Project - "Recipes Of Grandma And Others"
+The project is a website on recipes, which is a platform for saving, creating, following and getting information on recipes.
+It also interfaces with external api - "https://spoonacular.com/".
+More technical info:
+1. The backend was implemented in node.js + express.js
+2. Data base was implemented in azure sql.
+3. Includes three routers: auth, users and recipes
+  3.1 auth => for All authentication related routes 
+  3.2 users => for all the user personal app info related routes
+  3.3 recipes => for all recipes general info
