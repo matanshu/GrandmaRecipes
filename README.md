@@ -4,15 +4,13 @@ Author: Matan Shushan
 A Single-Page-Application project Implemented during Web Development Environments course
 It aimed for retrieving, managing and displaying recipes.
 
+# General setup
+1. Server must be on before running the client
+2. Change the spoonacular's api key before running the client
+
 # Client Build Setup
-#install dependencies
-npm install
-
-#serve with hot reload at localhost:8081
-npm run serve
-
-#build for production with minification
-npm run build
+1. install dependencies => npm install
+2. serve with hot reload at localhost:8081 => npm run serve
 
 # Main functionallity:
 1. login, logout, registration
