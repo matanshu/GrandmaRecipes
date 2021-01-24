@@ -4,14 +4,14 @@ Author: Matan Shushan
 A Single-Page-Application project Implemented during Web Development Environments course
 It aimed for retrieving, managing and displaying recipes.
 
-Build Setup
-# install dependencies
+# Client Build Setup
+install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
+serve with hot reload at localhost:8081
+npm run serve
 
-# build for production with minification
+build for production with minification
 npm run build
 
 # Main functionallity:
