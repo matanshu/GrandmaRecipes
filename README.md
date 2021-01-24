@@ -5,13 +5,13 @@ A Single-Page-Application project Implemented during Web Development Environment
 It aimed for retrieving, managing and displaying recipes.
 
 # Client Build Setup
-install dependencies
+#install dependencies
 npm install
 
-serve with hot reload at localhost:8081
+#serve with hot reload at localhost:8081
 npm run serve
 
-build for production with minification
+#build for production with minification
 npm run build
 
 # Main functionallity:
