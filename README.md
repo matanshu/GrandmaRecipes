@@ -17,6 +17,8 @@ Including the following functionallity:
 
 Additional Info:
 1. Webiste communicates with external api: https://spoonacular.com/food-api/docs
-2. Server was Implemented by node js, using express library and communicates with external api. It also used Microsoft Azure DB for saving website data.
-3. Server Includes three routers: auth, users and recipes 3.1 auth => for All authentication related routes 3.2 users => for all the user personal app info related routes 3.3 recipes => for all recipes general info
-4. Client was Implemented by Vue js framework. 
+2. Link for website api: https://app.swaggerhub.com/apis-docs/matanshu/IdoMatanRecipeApi/3.0.3
+3. Server was Implemented by node js, using express library and communicates with external api. It also used Microsoft Azure DB for saving website data.
+4. Server Includes three routers: auth, users and recipes.
+auth => for All authentication related routes, users => for all user personal app info related routes and recipes => for all recipes general info
+4. Client was Implemented by Vue js framework.
