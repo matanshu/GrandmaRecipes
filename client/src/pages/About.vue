@@ -1,28 +1,30 @@
 <template>
-  <div class="container">
-    <h1>About</h1>
-    <p>
-      <br />
-      The Development team for this project are: Matan Shushan (204196059), Ido
-      Kestenbaum(205767833).
-      <br />
-      In this project we Worked with server side (3.2) and the in the current
-      part with the client side (3.3).
-      <br />
-      We learned to write in new development languages ​​and that challenged us.
-      The site contains recipes of users who have registered for this site.
-      <br />
-      It retrieves information from the server we build in 3.2.
-      <br />
 
-      Link to section 3.1:
-      https://github.com/SISE-Web-Development-Environments/assignment3-1-matan-ido.git<br />
+  <div id="about">
+    <div style="width: 80%; margin: 0 auto">
+      <h2>About</h2>
+      <br />
+      <hr />
+      <br />
+      
+    <u>Authors:</u> Matan Shushan<br>
+    <br>
+    A Single-Page-Application project Implemented during Web Development Environments course<br>
+    It aimed for retrieving, managing and displaying recipes.<br><br>
+    Including the following functionallity:
+    <br>
+    <ul>
+      <li>login, logout, registration</li>
+      <li>Displaying recipes as preview</li>
+      <li>Displaying full details recipe (including ingredients and preperation intstructions)</li>
+      <li>Creating new recipes</li>
+      <li>Searching recipes (with option to filter by: Cuisine, Diet or Intolerance)</li>
+      <li>Saving recipes to favorites</li>
+      <li>Getting indication whether user already watched recipe and added it to his favorite list </li>
+      <li>Displaying user last watched recipes</li>
+      <li>Generating random recipes</li>
+    </ul>
 
-      Link to section 3.2:
-      https://github.com/SISE-Web-Development-Environments/assignment-3-2-matan-ido.git<br />
-
-      Link to section 3.3:
-      https://github.com/SISE-Web-Development-Environments/assignment-3-3-matan-ido.git<br />
-    </p>
+    </div>
   </div>
 </template>
